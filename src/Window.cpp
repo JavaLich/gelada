@@ -1,18 +1,39 @@
 #include "Window.h"
 
-#include <QHBoxLayout>
+#include <QVBoxLayout>
+
+#include <iostream>
 
 Window::Window(QWidget* parent) : QWidget(parent) {
-    QHBoxLayout *layout = new QHBoxLayout(this);
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
 
     view = new WebView(this);
-    view->load(QUrl("https://voidlinux.org"));
-
-    layout->setContentsMargins(0, 0, 0, 0);
+    view->load(QUrl("https://duckduckgo.com"));
     layout->addWidget(view);
+
+    url = new QLineEdit(this);
+    url->setText("https://duckduckgo.com");
+    url->setVisible(false);
+    layout->addWidget(url);
+
+    QObject::connect(url, &QLineEdit::returnPressed, this, &Window::go);
+}
+
+void Window::go() {
+    url->setVisible(false);
+    view->load(QUrl(url->text()));
 }
 
 void Window::keyPressEvent(QKeyEvent* event) {
-    if (event->key() == Qt::Key_O) 
-        view->load(QUrl("https://duckduckgo.com"));
+    switch(event->key()) {
+        case Qt::Key_O:
+            url->setVisible(true);
+            url->setFocus();
+            url->selectAll();
+            break;
+        case Qt::Key_Escape:
+            std::cout << "Enter normal mode" << std::endl;
+            break;
+    }
 }
