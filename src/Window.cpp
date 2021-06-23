@@ -32,8 +32,5 @@ void Window::keyPressEvent(QKeyEvent* event) {
             url->setFocus();
             url->selectAll();
             break;
-        case Qt::Key_Escape:
-            std::cout << "Enter normal mode" << std::endl;
-            break;
     }
 }
