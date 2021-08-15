@@ -5,7 +5,7 @@
 #include <iostream>
 
 Window::Window(QWidget* parent) : QWidget(parent) {
-    QVBoxLayout *layout = new QVBoxLayout(this);
+    QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
 
     view = new WebView(this);
@@ -20,13 +20,21 @@ Window::Window(QWidget* parent) : QWidget(parent) {
     QObject::connect(url, &QLineEdit::returnPressed, this, &Window::go);
 }
 
+QString getURL(QString url) {
+    if (url.contains(':')) {
+        return url;
+    } else {
+        return "http://" + url;
+    }
+}
+
 void Window::go() {
     url->setVisible(false);
-    view->load(QUrl(url->text()));
+    view->load(QUrl(getURL(url->text())));
 }
 
 void Window::keyPressEvent(QKeyEvent* event) {
-    switch(event->key()) {
+    switch (event->key()) {
         case Qt::Key_O:
             url->setVisible(true);
             url->setFocus();
